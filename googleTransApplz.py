@@ -1,4 +1,5 @@
 import sys
+import re
 import googletrans
 
 from PyQt5.QtWidgets import *
@@ -24,10 +25,16 @@ class GoogleTrans(QMainWindow, form_class):
 
     def trans_action(self):  # 번역 실행 함수 -> slot 함수
         korText = self.kor_input.text()  # kor_input에 입력된 한글 텍스트 가져오기
+        reg = re.compile('[가-힣]')  # 한글만 찾는 정규표현식
+
         if korText == "":
             print("공백입력!!")
             QMessageBox.warning(self, "입력오류!","한글입력란에 번역할 문장을 넣어주세요.")
+        elif korText != reg:  # 한글인지 아닌 여부 확인(숫자 또는 영어로만 입력시 경고창 출력)
+            print("한글아닌 문자 입력!!")
+            QMessageBox.warning(self, "입력오류!", "한글입력란에는 한글만 넣어주세요.")
         else:
+            print("정상번역결과 출력!!")
             trans = googletrans.Translator()  # 구글트랜스 모듈의 객체 선언
             # print(googletrans.LANGUAGES) -> 번역 언어의 dest 약자 찾기
 
